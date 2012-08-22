@@ -7,6 +7,9 @@
 you to easily generate [Handlebars](http://handlebarsjs.com) templates using
 [Haml](http://www.haml-lang.com).
 
+# About this fork
+This fork only generates handlebars html from haml source files. It is intended to work in conjunction with [handlebar_assets](https://github.com/leshill/handlebars_assets) gem.
+
 # Installation
 
 Add the following line to your Gemfile (on Rails, inside the `:assets` group):

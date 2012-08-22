@@ -84,27 +84,12 @@ module Hamlbars
       @engine = ::Haml::Engine.new(data, options)
     end
 
-    # Uses Haml to render the template into an HTML string, then 
-    # wraps it in the neccessary JavaScript to serve to the client.
+    # Uses Haml to render the template into an HTML string
     def evaluate(scope, locals, &block)
-      template = if @engine.respond_to?(:precompiled_method_return_value, true)
-                   super(scope, locals, &block)
-                 else
-                   @engine.render(scope, locals, &block)
-                 end
-
-      if scope.respond_to? :logical_path
-        path = scope.logical_path
+      if @engine.respond_to?(:precompiled_method_return_value, true)
+        super(scope, locals, &block).strip
       else
-        path = basename
-      end
-
-      if basename =~ /^_/
-        name = partial_path_translator(path)
-        "#{self.class.template_partial_method}('#{name}', '#{template.strip.gsub(/(\r\n|[\n\r"'])/) { JS_ESCAPE_MAP[$1] }}');\n"
-      else
-        name = self.class.path_translator(path)
-        "#{self.class.template_destination}[\"#{name}\"] = #{self.class.template_compiler}(\"#{template.strip.gsub(/(\r\n|[\n\r"'])/) { JS_ESCAPE_MAP[$1] }}\");\n"
+        @engine.render(scope, locals, &block).strip
       end
     end
 
